@@ -1,5 +1,5 @@
 # ConnectX
-"""
+
 Variant of connect 4 with arbitrary game board size and win-length
 
 Inputs: Board X, Board Y, Win Length... player count?!
@@ -19,5 +19,3 @@ Constraints / error conditions:
  - Min/max sizes. Min = 3, Max = 100
 
 Likely modules
-
-"""
