@@ -3,9 +3,9 @@
 Variant of connect 4 with arbitrary game board size and win-length
 
 Inputs: Board X, Board Y, Win Length... player count?!
-
-ConnectX(3,3,3)
-ConnectX(10,8,4)
+Examples:
+ - ConnectX(3,3,3)
+ - ConnectX(10,8,4)
 
 Win condition:
  - A player has an uninterrupted run of win_length
