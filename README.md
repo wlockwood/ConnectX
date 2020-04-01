@@ -18,4 +18,7 @@ Constraints / error conditions:
  - Board should not take more than 1s to process on each turn
  - Min/max sizes. Min = 3, Max = 100
 
-Likely modules
+Likely modules:
+ - Max run size per player
+ - Has someone won?
+ - Display board
