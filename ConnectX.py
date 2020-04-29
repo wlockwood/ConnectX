@@ -14,37 +14,37 @@ def get_players():
     """
     Get player 
     """
+    debug = 1
     players = {}
+    colors = ["red", "blue", "black", "yellow", "green", "orange", "teal", "off-white", "purple", "pinkish"]
 
-    # colors
-    colors = ["red","blue", "black", "yellow", "green", "orange", "teal", "off-white", "purple", "pinkish"]
-    
-    try:
-        player_num = int(input("How many players are going to play (1-10)?\n"))
-        if player_num > 10:
-            print(f"{player_num} is too large. Please try again")
+    if debug == 1:
+        # Debug values
+        player_num = 2
+        deplay = ["you", "me"]
+
+    else:
+
+        try:
+            player_num = int(input("How many players are going to play (1-10)?\n"))
+            if player_num > 10:
+                print(f"{player_num} is too large. Please try again")
+                exit()
+
+        except:
+            print("Please enter a valid number, not whatever that was.")
             exit()
 
-    except:
-        print("Please enter a valid number, not whatever that was.")
-        exit()
-
-
-    '''
-    # Debug values
-    colors = ["red","blue"]
-    player_num = 2
-    players2 = ["you", "me"]
-    '''
 
     # player id - used for color and identification
     play_id = 0
 
     while player_num != 0:
         cur_col = colors[play_id]
-        # print(cur_col)
-        cur_player = input(f"Player {play_id+1} , What is your name?\n")
-        # cur_player = players2[play_id] # debug val.
+        if debug == 0:
+            cur_player = input(f"Player {play_id+1} , What is your name?\n")
+        else:
+            cur_player = deplay[play_id] # debug val.
         players.update( {cur_player: Player(play_id,cur_player,cur_col)})
         play_id +=1
         player_num -= 1
@@ -55,7 +55,6 @@ def get_players():
 def print_table(players):
     print("    ID     |    Name       |    color ")
     for pl in players:
-        # print(players[pl].name)
         Player.list_players(players[pl])
 
 # TODO: create a table display for players
@@ -82,7 +81,7 @@ Ryan (green player), it's your turn. Input the column you'd like to place into (
 
 
 
-# Progress through order of players.
+# Progress through order of players. (outdated)
 '''
 def turn_order(players_list):
     while True:
