@@ -20,8 +20,8 @@ def get_players():
 
     if debug == 1:
         # Debug values
-        player_num = 2
-        deplay = ["you", "me"]
+        player_num = 3
+        deplay = ["Chrono", "Lucca", "Marle", "Magus", "Robo", "Ayla", "Frog"]
 
     else:
 
@@ -53,6 +53,7 @@ def get_players():
 
 
 def print_table(players):
+    print("This is the current list of players.")
     print("    ID     |    Name       |    color ")
     for pl in players:
         Player.list_players(players[pl])
@@ -62,7 +63,7 @@ def print_table(players):
 # TODO: set some debug values
 # TODO: Create a method to ask user for a number
 # TODO: Create a method to print a sweet colored text representation of the board
-
+# TODO: create a size of board question/logic
 
 
 """
@@ -79,20 +80,59 @@ Ryan (green player), it's your turn. Input the column you'd like to place into (
  - Find a way to find the lowest row in that column
 """
 
-
-
-# Progress through order of players. (outdated)
+def table_check(color, move, size):
+    #tab = "|_" * size
+    #tabl = f"{tab}|\n" *6
+    print(tabl)
+    print(color,move)
+# Progress through order of players.
 
 def turn_order(players_list):
-    for p in players_list:
-        print(f"{players_list[p.name]}")
+    size = 8 # debug we'll set this up differently later
+    board_line = ["|_"] * size
+    board_key = ["A","B","C","D","E","F"]
+    board_matrix = {'A':board_line.copy(), 'B':board_line.copy(), 'C':board_line.copy(), 'D':board_line.copy(),
+                    'E': board_line.copy(), 'F': board_line.copy()}
+
+    while True:
+        for p in players_list:
+            x = players_list[p]
+            move = input(f"{x.name} ({x.color} player), it's your turn. Input the column you'd like to place into (1-{size}) \n")
+            try:
+                move = int(move)
+            except:
+                print("not a valid input. Next player's turn.")
+                continue
+
+            if move <= size:
+                move -= 1
+                for c in board_key[::-1]:
+                    # print(c)
+                    if board_matrix[c][move] == "|_":
+                        print("victory")
+                        board_matrix[c][move] = f"|{x.color}"
+
+                        break
+                    else:
+                        continue
+
+
+                for c in board_key:
+                    print(f"{c} - {''.join(board_matrix[c])}|")
+
+                # print(board_matrix)
+                # table_check(x.color, move, size)
+            else:
+                print("not a valid input. Next player's turn.")
+
+
             
 
 
 def main():
     play = get_players()
-    print(play)
     print_table(play)
+    print("\n\n")
     turn_order(play)
 
 # Actually run all the things.
