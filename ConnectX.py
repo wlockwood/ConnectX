@@ -1,6 +1,6 @@
 class Player():
 
-    def __init__(self, plid:int, name: str, color: str):
+    def __init__(self, plid: int, name: str, color: str):
         # Parameters
         self.plid = plid
         self.name = name
@@ -9,6 +9,33 @@ class Player():
     def list_players(self):
         print("--------------------------------------------")
         print(f"|  {self.plid}  |  {self.name}  |  {self.color}  |")
+
+
+class Color():  # TODO: Is there already a Python color module?
+    colors = {}
+
+    def __init__(self, full_name: str, abbreviation: str, rgb):  # TODO: Most pythonic way to store an RGB value?
+        self.color_name = full_name
+        self.abbreviation = abbreviation  # Should be three letters
+        self.rgb = rgb
+        Color.colors.append(self)
+
+    def __str__(self):
+        return self.color_name
+
+    def __repr__(self):
+        return "(Color) " + self.color_name
+
+    @staticmethod
+    def build_colors():  # TODO: Some way to do a *class* initialization?
+        colors = ["red", "blue", "black", "yellow", "green", "orange", "teal", "off-white", "purple", "pinkish"]
+        Color("red", "red", "")
+        Color("blue", "blu", "")
+        Color("black", "blk", "")
+        Color("yellow", "ylw", "")
+        Color("green", "grn", "")
+        # ...
+
 
 def get_players():
     """
@@ -35,25 +62,24 @@ def get_players():
             print("Please enter a valid number, not whatever that was.")
             exit()
 
-
     # player id - used for color and identification
     play_id = 0
 
     while player_num != 0:
         cur_col = colors[play_id]
         if debug == 0:
-            cur_player = input(f"Player {play_id+1} , What is your name?\n")
+            cur_player = input(f"Player {play_id + 1} , What is your name?\n")
         else:
-            cur_player = deplay[play_id] # debug val.
-        players.update( {cur_player: Player(play_id,cur_player,cur_col)})
-        play_id +=1
+            cur_player = deplay[play_id]  # debug val.
+        players.update({cur_player: Player(play_id, cur_player, cur_col)})
+        play_id += 1
         player_num -= 1
 
-    return(players)
+    return (players)
 
 
-def get_size():
-    size = input( "How many columns would you like to play with (2-???)? (Standard is 7. 12+ is playable, but weird)")
+def get_board_size():
+    size = input("How many columns would you like to play with (2-???)? (Standard is 7. 12+ is playable, but weird)")
 
     try:
         size = int(size)
@@ -64,13 +90,15 @@ def get_size():
         print("You must be lonely. This is not a single player game. ")
         exit()
 
-    return(size)
+    return (size)
+
 
 def print_table(players):
     print("This is the current list of players.")
     print("    ID     |    Name       |    color ")
     for pl in players:
         Player.list_players(players[pl])
+
 
 # TODO: create a table display for players
 # TODO: look into/set up  __repr__
@@ -95,18 +123,18 @@ Ryan (green player), it's your turn. Input the column you'd like to place into (
 """
 
 
-
 def turn_order(players_list, size):
     # size = 8 # debug we'll set this up differently later
     board_line = ["|_____"] * size
-    board_key = ["A","B","C","D","E","F"]
-    board_matrix = {'A':board_line.copy(), 'B':board_line.copy(), 'C':board_line.copy(), 'D':board_line.copy(),
+    board_key = ["A", "B", "C", "D", "E", "F"]
+    board_matrix = {'A': board_line.copy(), 'B': board_line.copy(), 'C': board_line.copy(), 'D': board_line.copy(),
                     'E': board_line.copy(), 'F': board_line.copy()}
 
     while True:
         for p in players_list:
             x = players_list[p]
-            move = input(f"{x.name} ({x.color} player), it's your turn. Input the column you'd like to place into (1-{size}) \n")
+            move = input(
+                f"{x.name} ({x.color} player), it's your turn. Input the column you'd like to place into (1-{size}) \n")
             try:
                 move = int(move)
             except:
@@ -127,7 +155,6 @@ def turn_order(players_list, size):
                     else:
                         continue
 
-
                 for c in board_key:
                     print(f"{c} - {''.join(board_matrix[c])}|")
 
@@ -135,15 +162,13 @@ def turn_order(players_list, size):
                 print("not a valid input. Next player's turn.")
 
 
-            
-
-
 def main():
     play = get_players()
-    size = get_size()
+    size = get_board_size()
     print_table(play)
     print("\n\n")
-    turn_order(play,size)
+    turn_order(play, size)
+
 
 # Actually run all the things.
 
