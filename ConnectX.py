@@ -82,23 +82,19 @@ Ryan (green player), it's your turn. Input the column you'd like to place into (
 
 
 # Progress through order of players. (outdated)
-'''
+
 def turn_order(players_list):
-    while True:
-        turns = len(players_list) -1
-        while turns != -1:
-            print(f"player {players_list[turns]} (player {turns +1}), it's your turn.")
-            turns -=1
+    for p in players_list:
+        print(f"{players_list[p.name]}")
             
 
-# Run all the things!
 
 def main():
-    turn_order(get_players())
-
+    play = get_players()
+    print(play)
+    print_table(play)
+    turn_order(play)
 
 # Actually run all the things.
 
 main()
-'''
-print_table(get_players())
