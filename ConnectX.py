@@ -52,6 +52,20 @@ def get_players():
     return(players)
 
 
+def get_size():
+    size = input( "How many columns would you like to play with (2-???)? (Standard is 7. 12+ is playable, but weird)")
+
+    try:
+        size = int(size)
+    except:
+        print("Try a number please.")
+        exit()
+    if size == 1:
+        print("You must be lonely. This is not a single player game. ")
+        exit()
+
+    return(size)
+
 def print_table(players):
     print("This is the current list of players.")
     print("    ID     |    Name       |    color ")
@@ -80,16 +94,11 @@ Ryan (green player), it's your turn. Input the column you'd like to place into (
  - Find a way to find the lowest row in that column
 """
 
-def table_check(color, move, size):
-    #tab = "|_" * size
-    #tabl = f"{tab}|\n" *6
-    print(tabl)
-    print(color,move)
-# Progress through order of players.
 
-def turn_order(players_list):
-    size = 8 # debug we'll set this up differently later
-    board_line = ["|_"] * size
+
+def turn_order(players_list, size):
+    # size = 8 # debug we'll set this up differently later
+    board_line = ["|_____"] * size
     board_key = ["A","B","C","D","E","F"]
     board_matrix = {'A':board_line.copy(), 'B':board_line.copy(), 'C':board_line.copy(), 'D':board_line.copy(),
                     'E': board_line.copy(), 'F': board_line.copy()}
@@ -108,10 +117,12 @@ def turn_order(players_list):
                 move -= 1
                 for c in board_key[::-1]:
                     # print(c)
-                    if board_matrix[c][move] == "|_":
+                    if board_matrix[c][move] == "|_____":
                         print("victory")
-                        board_matrix[c][move] = f"|{x.color}"
-
+                        board_matrix[c][move] = f"| {x.color[0:3]} "
+                        break
+                    elif board_matrix['A'][move] != "|_____":
+                        print("Column's full. Next player's turn.")
                         break
                     else:
                         continue
@@ -120,8 +131,6 @@ def turn_order(players_list):
                 for c in board_key:
                     print(f"{c} - {''.join(board_matrix[c])}|")
 
-                # print(board_matrix)
-                # table_check(x.color, move, size)
             else:
                 print("not a valid input. Next player's turn.")
 
@@ -131,9 +140,10 @@ def turn_order(players_list):
 
 def main():
     play = get_players()
+    size = get_size()
     print_table(play)
     print("\n\n")
-    turn_order(play)
+    turn_order(play,size)
 
 # Actually run all the things.
 
