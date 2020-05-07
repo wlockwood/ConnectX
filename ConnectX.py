@@ -1,4 +1,4 @@
-class Player():
+class Player:
 
     def __init__(self, plid: int, name: str, color: str):
         # Parameters
@@ -11,7 +11,7 @@ class Player():
         print(f"|  {self.plid}  |  {self.name}  |  {self.color}  |")
 
 
-class Color():  # TODO: Is there already a Python color module?
+class Color:
     colors = {}
 
     def __init__(self, full_name: str, abbreviation: str, rgb):  # TODO: Most pythonic way to store an RGB value?
@@ -28,13 +28,14 @@ class Color():  # TODO: Is there already a Python color module?
 
     @staticmethod
     def build_colors():  # TODO: Some way to do a *class* initialization?
-        colors = ["red", "blue", "black", "yellow", "green", "orange", "teal", "off-white", "purple", "pinkish"]
-        Color("red", "red", "")
-        Color("blue", "blu", "")
-        Color("black", "blk", "")
-        Color("yellow", "ylw", "")
-        Color("green", "grn", "")
+        Color("red", "red", "d22")
+        Color("blue", "blu", "22d")
+        Color("yellow", "ylw", "ff5")
+        Color("green", "grn", "2d2")
+        Color("orange", "org", "e80")
         # ...
+
+    build_colors()  # Initialize a basic list of colors. Should run on load
 
 
 def get_players():
