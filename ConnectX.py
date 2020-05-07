@@ -14,11 +14,11 @@ class Player:
 class Color:
     colors = {}
 
-    def __init__(self, full_name: str, abbreviation: str, rgb):  # TODO: Most pythonic way to store an RGB value?
+    def __init__(self, full_name: str, abbreviation: str, rgb):
         self.color_name = full_name
         self.abbreviation = abbreviation  # Should be three letters
         self.rgb = rgb
-        Color.colors.append(self)
+        Color.colors[color_name] = self
 
     def __str__(self):
         return self.color_name
