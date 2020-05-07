@@ -1,42 +1,5 @@
-class Player:
-
-    def __init__(self, plid: int, name: str, color: str):
-        # Parameters
-        self.plid = plid
-        self.name = name
-        self.color = color
-
-    def list_players(self):
-        print("--------------------------------------------")
-        print(f"|  {self.plid}  |  {self.name}  |  {self.color}  |")
-
-
-class Color:
-    colors = {}
-
-    def __init__(self, full_name: str, abbreviation: str, rgb):
-        self.color_name = full_name
-        self.abbreviation = abbreviation  # Should be three letters
-        self.rgb = rgb
-        Color.colors[color_name] = self
-
-    def __str__(self):
-        return self.color_name
-
-    def __repr__(self):
-        return "(Color) " + self.color_name
-
-    @staticmethod
-    def build_colors():  # TODO: Some way to do a *class* initialization?
-        Color("red", "red", "d22")
-        Color("blue", "blu", "22d")
-        Color("yellow", "ylw", "ff5")
-        Color("green", "grn", "2d2")
-        Color("orange", "org", "e80")
-        # ...
-
-    build_colors()  # Initialize a basic list of colors. Should run on load
-
+import Color
+import Player
 
 def get_players():
     """
@@ -44,12 +7,10 @@ def get_players():
     """
     debug = 1
     players = {}
-    colors = ["red", "blue", "black", "yellow", "green", "orange", "teal", "off-white", "purple", "pinkish"]
 
     if debug == 1:
         # Debug values
         player_num = 3
-        deplay = ["Chrono", "Lucca", "Marle", "Magus", "Robo", "Ayla", "Frog"]
 
     else:
 
@@ -107,7 +68,8 @@ def print_table(players):
 # TODO: Create a method to ask user for a number
 # TODO: Create a method to print a sweet colored text representation of the board
 # TODO: create a size of board question/logic
-
+# TODO: Save/load
+# TODO: Multiplayer across network?
 
 """
 |_|_|_|_|_|
