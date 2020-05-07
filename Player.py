@@ -44,7 +44,10 @@ class PlayerColor(Color):
     all_colors: Dict = {}
 
     def __init__(self, full_name: str, rgb: str, abbreviation: str = ""):
-        super().__init__(full_name, rgb, abbreviation)
+        # Build the underlying Color if it doesn't already exist
+        if full_name not in Color.color_list.keys():
+            super().__init__(full_name, rgb, abbreviation)
+
         PlayerColor.all_colors[full_name] = self
 
         # Tracks whether the color is available vs already in use
@@ -57,7 +60,7 @@ class PlayerColor(Color):
     @classmethod
     def get_available_colors(cls) -> List:
         """Returns a list of names of available colors."""
-        return [k for k, v in cls.all_colors.items() if v.is_available()]
+        return [cname for cname, cobject in cls.all_colors.items() if cobject.is_available()]
 
     @classmethod
     def acquire_color(cls, player: Player, color_name: str = None) -> "PlayerColor":
@@ -90,10 +93,11 @@ class PlayerColor(Color):
         return found_color
 
     @classmethod
-    def build_player_colors(cls):
+    def build_player_colors(cls):  # TODO: This should probably be in the Color class.
         cls("red", "d22")
         cls("blue", "22d")
         cls("yellow", "ff5", "ylw")
         cls("green", "2d2", "grn")
         cls("orange", "e80", "org")
-
+        cls("purple", "dd0", "prp")
+        cls("brown", "b50", "brn")

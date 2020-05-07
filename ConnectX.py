@@ -1,5 +1,5 @@
-import Color
-import Player
+from Player import Player, PlayerColor
+from InterfaceHelpers import *
 
 def get_players():
     """
@@ -10,7 +10,7 @@ def get_players():
 
     if debug == 1:
         # Debug values
-        player_num = 3
+        return Player() * 3
 
     else:
 
@@ -28,11 +28,11 @@ def get_players():
     play_id = 0
 
     while player_num != 0:
-        cur_col = colors[play_id]
+        cur_col = PlayerColor.get_available_colors()[play_id]
         if debug == 0:
             cur_player = input(f"Player {play_id + 1} , What is your name?\n")
         else:
-            cur_player = deplay[play_id]  # debug val.
+            cur_player = Player.default_player_names[play_id]  # debug val.
         players.update({cur_player: Player(play_id, cur_player, cur_col)})
         play_id += 1
         player_num -= 1
@@ -62,11 +62,9 @@ def print_table(players):
         Player.list_players(players[pl])
 
 
-# TODO: create a table display for players
-# TODO: look into/set up  __repr__
-# TODO: set some debug values
 # TODO: Create a method to ask user for a number
-# TODO: Create a method to print a sweet colored text representation of the board
+# TODO: Create a method to print a sweet text representation of the board
+# TODO: Figure out colored text output
 # TODO: create a size of board question/logic
 # TODO: Save/load
 # TODO: Multiplayer across network?
@@ -126,8 +124,12 @@ def turn_order(players_list, size):
 
 
 def main():
-    play = get_players()
-    size = get_board_size()
+
+    # Defaults here are based off of replicating the classic game Connect Four. Maxes and Mins are just guesses.
+    player_count = ask_for_int("How many players?", default=2, accept_min=2, accept_max=12)
+    board_size = ask_for_int("How large should the board be?", default=6, accept_min=2, accept_max=12)
+    win_run_length = ask_for_int("How many contiguous tokens to win?", default=4, accept_min=2, accept_max=12)
+
     print_table(play)
     print("\n\n")
     turn_order(play, size)

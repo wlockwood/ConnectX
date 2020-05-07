@@ -14,7 +14,7 @@ class Color:
 
         # Assign parameters
         self.color_name = full_name
-        self.abbreviation = abbreviation or full_name[:Color.abbreviation_length]  # *Should* be three letters...
+        self.abbreviation = abbreviation or full_name[:Color.abbreviation_length]
         self.rgb = rgb
 
         # Other fields
