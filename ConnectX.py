@@ -1,6 +1,6 @@
 class Player():
 
-    def __init__(self, plid: int, name: str, color: str):
+    def __init__(self, plid: int, name: str, color: Color):
         # Parameters
         self.plid = plid
         self.name = name
@@ -8,17 +8,17 @@ class Player():
 
     def list_players(self):
         print("--------------------------------------------")
-        print(f"|  {self.plid}  |  {self.name}  |  {self.color}  |")
+        print(f"|  {self.plid}  |  {self.name}  |  {self.color.name}  |")
 
 
-class Color():  # TODO: Is there already a Python color module?
+class Color(): 
     colors = {}
 
-    def __init__(self, full_name: str, abbreviation: str, rgb):  # TODO: Most pythonic way to store an RGB value?
+    def __init__(self, full_name: str, abbreviation: str, rgb): 
         self.color_name = full_name
         self.abbreviation = abbreviation  # Should be three letters
         self.rgb = rgb
-        Color.colors.append(self)
+        Color.colors[color_name] = self
 
     def __str__(self):
         return self.color_name
@@ -29,12 +29,72 @@ class Color():  # TODO: Is there already a Python color module?
     @staticmethod
     def build_colors():  # TODO: Some way to do a *class* initialization?
         colors = ["red", "blue", "black", "yellow", "green", "orange", "teal", "off-white", "purple", "pinkish"]
-        Color("red", "red", "")
+        Color("red", "red", ""
         Color("blue", "blu", "")
         Color("black", "blk", "")
         Color("yellow", "ylw", "")
         Color("green", "grn", "")
-        # ...
+        # ... add more
+
+
+class Board():
+    
+    
+    def __init__(self, board_x, board_y):
+        self.x_size = board_x
+        self.y_size = board_y
+        self.columns = []
+
+        # Fill self.columns with empty lists
+        for i in range(x_size):
+            self.columns.append([])
+
+    def play_chip(self, column_index: int, player: Player):
+        # Validate the column index
+        if(column_index > self.x_size):
+            raise Exception(f"Can't play chip at column {column_index} of {self.x_size}.") # Create a new PlayException or RuleException class?
+
+        this_col = columns[column_index - 1]  # Adjust for zero-indexing
+
+        if len(this_col) >= y_size:
+            raise Exception(f"Column {column_index} is full and can't be played into.")
+        
+        # Add player reference to stand in for their played token
+        this_col.append(player)
+
+
+    def check_for_win(self):
+        # Win condition: Any contiguous row or column of the same color of length X
+        # Win condition: Any contiguous diagonal of the same color of length X
+        return False
+
+
+    def display(self):
+        empty_cell = "|_____"
+        
+        this_row = []
+        row_index = self.y_size
+        for col in self.columns:
+            if len(col) < self.y_size and not col[row_index]:  # On board and not occupied
+                this_row.append(None)
+            else:
+                this_row.append(col[row_index])
+            
+            row_index -= 1
+            if row_index < 0:
+                break
+        
+        # Print rows
+
+
+
+        # print out empty cells for cells which don't exist (based on len of columns vs. board size)
+        # print out contents of column, starting from highest value 
+        
+        # Print out the 
+
+        pass
+
 
 
 def get_players():
@@ -146,6 +206,7 @@ def turn_order(players_list, size):
                 for c in board_key[::-1]:
                     # print(c)
                     if board_matrix[c][move] == "|_____":
+
                         print("victory")
                         board_matrix[c][move] = f"| {x.color[0:3]} "
                         break
@@ -161,13 +222,16 @@ def turn_order(players_list, size):
             else:
                 print("not a valid input. Next player's turn.")
 
+def calculate_longest_possible_run(board_x, board_y):
+    print("TEMP: Only allowing orthogonal victories.")
+    return max(board_x, board_y)
 
 def main():
     play = get_players()
     size = get_board_size()
     print_table(play)
     print("\n\n")
-    turn_order(play, size)
+    turn_order(play, size)  # Game loop
 
 
 # Actually run all the things.
