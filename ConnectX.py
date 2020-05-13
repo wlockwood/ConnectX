@@ -39,7 +39,8 @@ def get_players():
 
     return (players)
 
-
+'''
+Moved to Board.py
 def get_board_size():
     size = input("How many columns would you like to play with (2-???)? (Standard is 7. 12+ is playable, but weird)")
 
@@ -61,6 +62,7 @@ def print_table(players):
     for pl in players:
         Player.list_players(players[pl])
 
+'''
 
 # TODO: Create a method to ask user for a number
 # TODO: Create a method to print a sweet text representation of the board
