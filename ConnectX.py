@@ -126,15 +126,34 @@ def turn_order(players_list, size):
 def main():
 
     # Defaults here are based off of replicating the classic game Connect Four. Maxes and Mins are just guesses.
+
+    # Ask for player configuration. TODO: Names and colors
+    PlayerColor.build_player_colors()
     player_count = ask_for_int("How many players?", default=2, accept_min=2, accept_max=12)
-    board_size = ask_for_int("How large should the board be?", default=6, accept_min=2, accept_max=12)
+    players = [Player() for i in range(player_count + 1)]
+    print(players)
+
+    # Ask for game options
+    board_size_x = ask_for_int("How wide should the board be?", default=7, accept_min=2, accept_max=12)
+    board_size_y = ask_for_int("How tall should the board be?", default=6, accept_min=2, accept_max=12)
     win_run_length = ask_for_int("How many contiguous tokens to win?", default=4, accept_min=2, accept_max=12)
 
-    print_table(play)
-    print("\n\n")
-    turn_order(play, size)
-
+    #TODO: Confirm selections
 
 # Actually run all the things.
 
 main()
+
+
+"""
+TODO: Board class
+Fields / Properties:
+    x/y size of board
+    board columns
+Actions:
+    check_for_win(self) -> winning Player - Has someone won
+    print_board(self) -> None - Show the board
+    print_board_with_color(self) -> None - Show the board with pretty colored dots
+    can_continue(self) -> bool - Whether the game can continue. For now, check if full.
+
+"""
