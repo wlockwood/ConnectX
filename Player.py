@@ -7,11 +7,13 @@ class Player:
     current_players: Dict = {}
     _next_player_id: int = 1
 
+
+
     def __init__(self, name: str = None, color_name: str = None):
         # Parameters
         self.plid: int = Player.get_next_id()
         self.name: str = name or self.get_next_default_player_name()
-        self.color: Color = PlayerColor.acquire_color(self, color_name)
+        self.color: PlayerColor = PlayerColor.acquire_color(self, color_name)
 
         # Player tracking
         Player.current_players[name] = self
@@ -43,6 +45,7 @@ class PlayerColor(Color):
     """Extension/wrapper for Color that handles game-specific functionality."""
     all_colors: Dict = {}
 
+
     def __init__(self, full_name: str, rgb: str, abbreviation: str = ""):
         # Build the underlying Color if it doesn't already exist
         if full_name not in Color.color_list.keys():
@@ -51,7 +54,7 @@ class PlayerColor(Color):
         PlayerColor.all_colors[full_name] = self
 
         # Tracks whether the color is available vs already in use
-        self.assigned_to_player = None  # As a backward reference, may cause problems with serialization
+        self.assigned_to_player: Player = None  # As a backward reference, may cause problems with serialization
 
     def is_available(self) -> bool:
         """Is this color available for use now?"""
@@ -92,12 +95,12 @@ class PlayerColor(Color):
         found_color.assigned_to_player = player
         return found_color
 
-    @classmethod
-    def build_player_colors(cls):  # TODO: This should probably be in the Color class.
-        cls("red", "d22")
-        cls("blue", "22d")
-        cls("yellow", "ff5", "ylw")
-        cls("green", "2d2", "grn")
-        cls("orange", "e80", "org")
-        cls("purple", "dd0", "prp")
-        cls("brown", "b50", "brn")
+    @staticmethod
+    def build_player_colors():  # TODO: This should probably be in the Color class.
+        PlayerColor("red", "d22")
+        PlayerColor("blue", "22d")
+        PlayerColor("yellow", "ff5", "ylw")
+        PlayerColor("green", "2d2", "grn")
+        PlayerColor("orange", "e80", "org")
+        PlayerColor("purple", "dd0", "prp")
+        PlayerColor("brown", "b50", "brn")
