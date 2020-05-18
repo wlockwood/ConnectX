@@ -1,9 +1,10 @@
 import Color
 from Player import Player, PlayerColor
+from Board import Board
 
 """
 This file is a throwaway intended for doing standalone testing of other modules.
-"""
+
 
 PlayerColor.build_player_colors()
 print("Available colors: ", PlayerColor.get_available_colors())
@@ -32,3 +33,7 @@ print(d_player)
 
 print()
 print("Available colors: ", PlayerColor.get_available_colors())
+"""
+b = Board.create_board(8,8)
+Board.print_board(b)
+Board.update_board(b,"chrono", 3)
