@@ -3,26 +3,31 @@ from typing import Dict, List
 
 
 class Player:
-    default_player_names: List = ["Chrono", "Lucca", "Marle", "Magus", "Robo", "Ayla", "Frog"]
+    default_player_names: List = ["Chrono", "Lucca", "Marle", "Magus", "Robo", "Ayla", 
+                                "Frog", "Ozzy", "Flea", "Dalton", "Slash", "Lavos"]
     current_players: Dict = {}
     _next_player_id: int = 1
 
 
 
     def __init__(self, name: str = None, color_name: str = None):
+        
         # Parameters
         self.plid: int = Player.get_next_id()
         self.name: str = name or self.get_next_default_player_name()
         self.color: PlayerColor = PlayerColor.acquire_color(self, color_name)
 
         # Player tracking
-        Player.current_players[name] = self
+        Player.current_players[self.name] = self
 
     def __str__(self):
         return f"{self.name} ({self.color})"
 
     def __repr__(self):
         return f"[Player {self.plid}, {str(self)}]"
+
+    def get_board_representation(self):
+        return self.color.abbreviation
 
     @classmethod
     def get_next_default_player_name(cls):
@@ -104,3 +109,9 @@ class PlayerColor(Color):
         PlayerColor("orange", "e80", "org")
         PlayerColor("purple", "dd0", "prp")
         PlayerColor("brown", "b50", "brn")
+        PlayerColor("lime", "bfc", "lim")
+        PlayerColor("cyan", "4ff")
+        PlayerColor("magenta", "f3e")
+        PlayerColor("coral", "fdb")
+        PlayerColor("navy", "007")
+

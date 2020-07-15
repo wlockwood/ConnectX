@@ -1,4 +1,5 @@
 from Player import Player, PlayerColor
+from Board import Board
 from InterfaceHelpers import *
 
 def get_players():
@@ -39,35 +40,7 @@ def get_players():
 
     return (players)
 
-'''
-Moved to Board.py
-def get_board_size():
-    size = input("How many columns would you like to play with (2-???)? (Standard is 7. 12+ is playable, but weird)")
-
-    try:
-        size = int(size)
-    except:
-        print("Try a number please.")
-        exit()
-    if size == 1:
-        print("You must be lonely. This is not a single player game. ")
-        exit()
-
-    return (size)
-
-
-def print_table(players):
-    print("This is the current list of players.")
-    print("    ID     |    Name       |    color ")
-    for pl in players:
-        Player.list_players(players[pl])
-
-'''
-
-# TODO: Create a method to ask user for a number
-# TODO: Create a method to print a sweet text representation of the board
 # TODO: Figure out colored text output
-# TODO: create a size of board question/logic
 # TODO: Save/load
 # TODO: Multiplayer across network?
 
@@ -126,26 +99,26 @@ def turn_order(players_list, size):
 
 
 def main():
-
     # Defaults here are based off of replicating the classic game Connect Four. Maxes and Mins are just guesses.
 
     # Ask for player configuration. TODO: Names and colors
     PlayerColor.build_player_colors()
     player_count = ask_for_int("How many players?", default=2, accept_min=2, accept_max=12)
-    players = [Player() for i in range(player_count + 1)]
+    players = [Player() for i in range(player_count)]
     print(players)
 
     # Ask for game options
     board_size_x = ask_for_int("How wide should the board be?", default=7, accept_min=2, accept_max=12)
     board_size_y = ask_for_int("How tall should the board be?", default=6, accept_min=2, accept_max=12)
-    win_run_length = ask_for_int("How many contiguous tokens to win?", default=4, accept_min=2, accept_max=12)
+    win_run_max = max(board_size_x, board_size_y)
+    win_run_length = ask_for_int("How many contiguous tokens to win?", default=4, accept_min=2, accept_max=win_run_max)
 
     #TODO: Confirm selections
 
+    #TODO: Build a cell class. Cells should know their coordinates and the player occupying them, if any.
 # Actually run all the things.
 
 main()
-
 
 """
 TODO: Board class
@@ -157,5 +130,7 @@ Actions:
     print_board(self) -> None - Show the board
     print_board_with_color(self) -> None - Show the board with pretty colored dots
     can_continue(self) -> bool - Whether the game can continue. For now, check if full.
+
+
 
 """
