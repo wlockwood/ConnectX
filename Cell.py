@@ -12,7 +12,26 @@ class Cell:
         self.contents = contents
 
     def is_occupied(self) -> bool:
-        if contents == None:
-            return True
-        else:
+        if self.contents is None:
             return False
+        else:
+            return True
+
+    def get_board_representation(self) -> str:
+        # If empty return what an empty cell looks like
+
+        # Otherwise, have the occupant decide how it wants to be displayed
+        if self.is_occupied():
+            return self.contents.get_board_representation()
+        else:
+            return "___"
+
+    def __repr__(self) -> str:
+        return f"Cell({self.x_pos},{self.y_pos}: {self.contents})"
+
+
+
+if __name__ == "__main__":
+    test_cell = Cell(0,0)
+    print(type(test_cell))
+    print(type(test_cell.is_occupied))

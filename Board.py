@@ -12,19 +12,18 @@ class Board:
         self.x_size = x_size
         self.y_size = y_size
 
-        self.board_grid = [[None for y in range(y_size)] for x in range(x_size)]
+        self.board_grid = [[Cell(x,y) for y in range(y_size)] for x in range(x_size)]
         
         
         print(f"Initialized an empty Board {x_size} wide by {y_size} tall.")
 
-    def get_cell(self, x: int, y:int) -> Player:
+    def get_cell(self, x: int, y:int) -> Cell:
         """
-        Returns the value of a cell using 0-indexed coordinates.
+        Returns a reference to the Cell at some coords using 0-indexed coordinates.
         """
         if not self.check_valid_coord(x,y):
             raise Exception(f"Coordinate ({x},{y}) is not on the board!")
             
-
         return self.board_grid[x][y]
     
 
@@ -41,7 +40,7 @@ class Board:
         """
         If a coordinate is both valid and empty return true, else false.
         """
-        if self.check_valid_coord(x,y) and self.get_cell(x,y) is None:
+        if self.check_valid_coord(x,y) and not self.get_cell(x,y).is_occupied():
             return True
         else:
             return False
@@ -56,13 +55,10 @@ class Board:
                 f"Player reference is the wrong type. Should be a Player class instance, instead was {type(player)}."
             )
 
-        if not self.check_valid_coord(x,y):
-            raise Exception(f"Coordinate ({x},{y}) is not on the board!")
- 
         if not self.check_playable_coord(x, y):
             raise Exception(f"Cannot assign player {player} to coordinates ({x},{y}) as it's already filled.")
         
-        self.board_grid[x][y] = player
+        self.get_cell(x,y).contents = player
         return True
 
 
@@ -73,7 +69,7 @@ class Board:
         """
         for i in range(self.y_size):
             print(f"({column_index},{i}) is: {self.get_cell(column_index, i)}")
-            if self.get_cell(column_index,i) is None:
+            if not self.get_cell(column_index,i).is_occupied():
                 return i
         return -1
 
@@ -225,8 +221,8 @@ class Board:
 
         # Test get-cell
         ## Bypass set-cell so that we don't have to rely on set-cell working correctly to confirm that read-cell also work correctly
-        testboard.board_grid[0][0] = player_list[0]  # The array is zero indexed
-        got_player: Player = testboard.get_cell(0,0) # The board's interface is one indexed
+        testboard.board_grid[0][0].contents = player_list[0]  # The array is zero indexed
+        got_player: Player = testboard.get_cell(0,0).contents # The board's interface is one indexed
         testboard.print_board()
         assert got_player == player_list[0], f"get_cell check failed: Expected a reference to {player_list[0]} got {got_player}"
         
@@ -247,20 +243,21 @@ class Board:
         # Test set-cell
         ## Confirm cell starts out empty
         test_get_cell = testboard.get_cell(3, 3)
-        assert test_get_cell == None, f"Cell is full but should be empty. Expected None, got {test_get_cell}"
+        assert test_get_cell.is_occupied() is False, f"Cell is full but should be empty. Expected False, got True. Contents: {test_get_cell.contents}"
         
         ## Insert a player into a cell and check if it worked. 
         testboard.set_cell(3, 3, player_list[1])
        
         test_get_cell = testboard.get_cell(3, 3)
-        assert test_get_cell == player_list[1], f"Cell isn't set properly. Expected {player_list[1]}, got {test_get_cell} which is a {type(test_get_cell)}"
+        assert test_get_cell.contents == player_list[1], f"Cell isn't set properly. Expected {player_list[1]}, got {test_get_cell.contents} which is a {type(test_get_cell)}"
 
         # Test get_lowest_open_cell_height
         testboard.set_cell(3, 0, player_list[1])
         testboard.set_cell(3, 1, player_list[0])
         testboard.set_cell(3, 2, player_list[1])
-        low_height = testboard.get_lowest_open_cell_height(0)
         testboard.print_board()
+        
+        low_height = testboard.get_lowest_open_cell_height(0)
         assert low_height == 1, f"Lowest height given earlier tests should be 1 as column contains something at (0,0). Got {low_height} instead"
         low_height = testboard.get_lowest_open_cell_height(1)
         assert low_height == 0, f"Lowest height given earlier tests should be 0 as column is empty. Got {low_height} instead"
