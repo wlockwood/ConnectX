@@ -265,8 +265,6 @@ class Board:
         assert low_height == 4, f"Lowest height given earlier tests should be 5 as column has four tokens in it. Got {low_height} instead"
         print("get_lowest_open_cell_height passed tests")
 
-
-
         # Test insert_token_into_column
         testboard.print_board()
 
