@@ -1,6 +1,7 @@
 from Player import Player, PlayerColor
 from typing import List, Any
 from Cell import Cell
+# import LambdaDirections 
 
 class Board:
     """
@@ -140,20 +141,37 @@ class Board:
         for row in range(self.y_size - 1, -1, -1):
             print(self.row_to_string(row))
         
-    def check_for_win(self, win_num):
+    def check_for_win(self, win_num, move): # TODO: Make name more accurate
         """
         Win check algorithm:
-            for each occupied cell:
-	        then compare with cell below
-	        if friendly, check next down
-		        repeat until out
-	        if total run length >= than win run length:
-		        cake is not a lie / victory
-		
-            same thing in every other direction
+            Look at latest player move position
+            compare with nearby cells 
+            if cells contain same player object add a point
+            if not, reset and try another direction
+        
         """
-
         points = 0
+        #get player's last move
+        move_col =  self.get_lowest_open_cell_height(move) - 1
+
+        origin_cell = (move,move_col)
+        player_check = self.get_cell(move,move_col)
+        print(f"player cell is {player_check}")
+        print(f"orgin cell = {origin_cell}")
+
+        # check, left to right
+
+
+        
+        # if points = win num > win.
+        if points >= win_num:
+            return True
+        else:
+            return False    
+
+
+
+        
         for origin_x in range(self.x_size):
             for origin_y in range(self.y_size):
                 # Skip unoccupied cells
@@ -161,7 +179,7 @@ class Board:
                 if origin_cell is None:
                     continue
                 # Compare with lower cells
-                if self.check_valid_coord(origin_x +1, origin_y -1):
+                if self.check_valid_coord(origin_x + 1, origin_y - 1):
                     check_cell_y = self.get_cell(origin_x, origin_y - 1)
                 else:
                     check_cell_y = None
@@ -174,7 +192,7 @@ class Board:
 
 
                 # Compare with digonal up left
-                if self.check_valid_coord(origin_x +1, origin_y +1):
+                if self.check_valid_coord(origin_x +1, origin_y + 1):
                     check_cell_diagUp = self.get_cell(origin_x + 1, origin_y + 1)
                 else:
                     check_cell_diagUp = None
@@ -285,6 +303,14 @@ class Board:
         # this should fail
         test = testboard.insert_token_into_column(3, player_list[0])
         assert test == False, f"This should have failed as column is full. instead got {test}"
+
+
+        #check the win
+        test = testboard.check_for_win(3,3)
+        assert test == True, f"This should return true. Got {test}."
+
+
+
         
 
 

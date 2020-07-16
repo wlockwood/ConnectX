@@ -21,7 +21,7 @@ class Player:
         Player.current_players[self.name] = self
 
     def __str__(self):
-        return f"{self.name} ({self.color})"
+        return f"{self.name} ({self.color.abbreviation})"
 
     def __repr__(self):
         return f"[Player {self.plid}, {str(self)}]"

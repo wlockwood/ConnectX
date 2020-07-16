@@ -14,7 +14,11 @@ def ask_for_int(query: str, required: bool = True, default: int = None,
             print()
             user_input = input(f"{query} ({accept_min} - {accept_max})\n")
             
+            if user_input == "" and default is not None:
+                return default
+
             user_int = int(user_input)
+            
             # No constraints
             if accept_min == float("-inf") and accept_max == float("inf"):
                 return user_int

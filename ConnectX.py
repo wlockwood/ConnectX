@@ -40,9 +40,11 @@ def get_players():
 
     return (players)
 
+# TODO: Check for wins
 # TODO: Figure out colored text output
 # TODO: Save/load
 # TODO: Multiplayer across network?
+
 
 """
 |_|_|_|_|_|
@@ -57,65 +59,53 @@ Ryan (green player), it's your turn. Input the column you'd like to place into (
  - Validate that there are open spaces on that column
  - Find a way to find the lowest row in that column
 """
-
-
-def turn_order(players_list, size):
-    # size = 8 # debug we'll set this up differently later
-    board_line = ["|_____"] * size
-    board_key = ["A", "B", "C", "D", "E", "F"]
-    board_matrix = {'A': board_line.copy(), 'B': board_line.copy(), 'C': board_line.copy(), 'D': board_line.copy(),
-                    'E': board_line.copy(), 'F': board_line.copy()}
-
-    while True:
-        for p in players_list:
-            x = players_list[p]
-            move = input(
-                f"{x.name} ({x.color} player), it's your turn. Input the column you'd like to place into (1-{size}) \n")
-            try:
-                move = int(move)
-            except:
-                print("not a valid input. Next player's turn.")
-                continue
-
-            if move <= size:
-                move -= 1
-                for c in board_key[::-1]:
-                    # print(c)
-                    if board_matrix[c][move] == "|_____":
-                        print("victory")
-                        board_matrix[c][move] = f"| {x.color[0:3]} "
-                        break
-                    elif board_matrix['A'][move] != "|_____":
-                        print("Column's full. Next player's turn.")
-                        break
-                    else:
-                        continue
-
-                for c in board_key:
-                    print(f"{c} - {''.join(board_matrix[c])}|")
-
-            else:
-                print("not a valid input. Next player's turn.")
+def take_turn(gameboard: Board, p: Player, win_num: int):
+    gameboard.print_board()
+    move = ask_for_int(f"Player {p.plid}, ({p.name}) it is your turn. Please choose a column.",accept_min=1,accept_max=gameboard.x_size) - 1
+    gameboard.insert_token_into_column(move,p)  #TODO: Actually handle players attempting invalid moves
+    gameboard.check_for_win(win_num, move)
+    
 
 
 def main():
     # Defaults here are based off of replicating the classic game Connect Four. Maxes and Mins are just guesses.
-
+    
     # Ask for player configuration. TODO: Names and colors
     PlayerColor.build_player_colors()
     player_count = ask_for_int("How many players?", default=2, accept_min=2, accept_max=12)
     players = [Player() for i in range(player_count)]
     print(players)
+    
+    # Get game configuration from user
+    while(True):
+        
 
-    # Ask for game options
-    board_size_x = ask_for_int("How wide should the board be?", default=7, accept_min=2, accept_max=12)
-    board_size_y = ask_for_int("How tall should the board be?", default=6, accept_min=2, accept_max=12)
-    win_run_max = max(board_size_x, board_size_y)
-    win_run_length = ask_for_int("How many contiguous tokens to win?", default=4, accept_min=2, accept_max=win_run_max)
+        # Ask for game options
+        board_size_x = ask_for_int("How wide should the board be?", default=7, accept_min=2, accept_max=12)
+        board_size_y = ask_for_int("How tall should the board be?", default=6, accept_min=2, accept_max=12)
+        win_run_max = max(board_size_x, board_size_y)
+        win_run_length = ask_for_int("How many contiguous tokens to win?", default=4, accept_min=2, accept_max=win_run_max)
 
-    #TODO: Confirm selections
+        print(f"Starting game with {player_count} players on a {board_size_x}x{board_size_y} board and a winning run length of {win_run_length}.")
+        response = ask_for_word("Is this correct? y/n")
+        if(response.lower()[0] == "y"):
+            break
+    
+    # Initialize board
+    gameboard = Board(x_size=board_size_x, y_size=board_size_y)
+    
+    # Cycling through turns
+    while(True):
+        for p in players:
+            take_turn(gameboard, p, win_run_length)
+            '''
+            if gameboard.check_for_win(move,win_run_length):
+                #call the endgame logic
+                pass
+            '''
 
-    #TODO: Build a cell class. Cells should know their coordinates and the player occupying them, if any.
+
+   
 # Actually run all the things.
 
 main()
