@@ -151,26 +151,6 @@ class Board:
         
         """
         points = 0
-        #get player's last move
-        move_col =  self.get_lowest_open_cell_height(move) - 1
-
-        origin_cell = (move,move_col)
-        player_check = self.get_cell(move,move_col)
-        print(f"player cell is {player_check}")
-        print(f"orgin cell = {origin_cell}")
-
-        # check, left to right
-
-
-        
-        # if points = win num > win.
-        if points >= win_num:
-            return True
-        else:
-            return False    
-
-
-
         
         for origin_x in range(self.x_size):
             for origin_y in range(self.y_size):
@@ -216,6 +196,7 @@ class Board:
                      
 
         return False
+        '''
 
     @staticmethod
     def run_tests():
