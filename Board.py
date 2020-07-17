@@ -128,11 +128,11 @@ class Board:
         """
         Prints a text-based representation of the board's current state.
         """
-        board_width = (self.x_size) * 5 - 1
+        board_width = (self.x_size)
         board_title = "Current board state"
         print()
         print("{title:=^{bw}}".format(title=board_title, bw=board_width))
-        print("_" * board_width)
+        print(" ___" * board_width)
         for row in range(self.y_size - 1, -1, -1):
             print(self.row_to_string(row))
 
@@ -331,6 +331,14 @@ class Board:
         testboard.insert_token_into_column(4, player_list[1])  # Already have a column in 3
         assert testboard.determine_winner(4) == player_list[1], "Failed to detect a horizontal win."
         
+        testboard = Board(5,5)
+        testboard.insert_token_into_column(1, player_list[1])
+        testboard.insert_token_into_column(2, player_list[0])
+        testboard.insert_token_into_column(3, player_list[1])
+        testboard.insert_token_into_column(4, player_list[0])
+        testboard.print_board()
+        assert testboard.determine_winner(3) == None, "Detected a false horizontal win"
+
         testboard = Board(5,5)
         testboard.insert_token_into_column(1, player_list[1])
         testboard.insert_token_into_column(2, player_list[0])

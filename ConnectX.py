@@ -65,6 +65,7 @@ def take_turn(gameboard: Board, p: Player, win_num: int):
     gameboard.insert_token_into_column(move,p)  #TODO: Actually handle players attempting invalid moves
     winner = gameboard.determine_winner(win_num)
     if winner:
+        gameboard.print_board()
         print(f"Yay, {winner} won!")
         exit()
     
@@ -101,11 +102,6 @@ def main():
     while(True):
         for p in players:
             take_turn(gameboard, p, win_run_length)
-            '''
-            if gameboard.check_for_win(move,win_run_length):
-                #call the endgame logic
-                pass
-            '''
 
 
    
