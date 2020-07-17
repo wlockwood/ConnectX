@@ -63,7 +63,10 @@ def take_turn(gameboard: Board, p: Player, win_num: int):
     gameboard.print_board()
     move = ask_for_int(f"Player {p.plid}, ({p.name}) it is your turn. Please choose a column.",accept_min=1,accept_max=gameboard.x_size) - 1
     gameboard.insert_token_into_column(move,p)  #TODO: Actually handle players attempting invalid moves
-    gameboard.check_for_win(win_num, move)
+    winner = gameboard.determine_winner(win_num)
+    if winner:
+        print(f"Yay, {winner} won!")
+        exit()
     
 
 
