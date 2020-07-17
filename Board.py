@@ -187,6 +187,7 @@ class Board:
             # if cell not empty, begin to compare with others
             friendly_player = c.contents
             origin_coord = Coord(c.x_pos,c.y_pos)
+            current_check = None 
 
             for direction in get_directions():
                 for distance in range(win_num):
@@ -195,12 +196,14 @@ class Board:
                     if not self.check_valid_coord(check_x,check_y):
                         break
 
-                    current_check = self.get_cell(check_x,check_y) 
-                    
+                    current_check = self.get_cell(check_x,check_y)
+
+                    if current_check.contents != friendly_player:
+                        break                    
+
                     if distance + 1 >= win_num:
                         return friendly_player
-                    if current_check.contents != friendly_player:
-                        break
+
         return None
 
     @staticmethod
@@ -349,6 +352,15 @@ class Board:
         testboard.print_board()
         assert testboard.determine_winner(3) == player_list[1], "Failed to detect a diagonal win."
 
+
+        testboard = Board(5,5)
+        testboard.insert_token_into_column(1, player_list[1])
+        testboard.insert_token_into_column(1, player_list[0])
+        testboard.insert_token_into_column(1, player_list[1])
+        testboard.insert_token_into_column(1, player_list[1])
+        testboard.print_board()
+        assert testboard.determine_winner(3) == None, f"Winner {testboard.determine_winner(3)} set despite 3 not being in a row."
+       
 
 
 if __name__ == "__main__":
