@@ -1,7 +1,7 @@
 from Player import Player, PlayerColor
 from typing import List, Any
 from Cell import Cell
-# import LambdaDirections 
+from LambdaDirections import translate, Coord, get_directions
 
 class Board:
     """
@@ -26,7 +26,6 @@ class Board:
             raise Exception(f"Coordinate ({x},{y}) is not on the board!")
             
         return self.board_grid[x][y]
-    
 
     def check_valid_coord(self, x: int, y: int) -> bool:
         """
@@ -62,14 +61,13 @@ class Board:
         self.get_cell(x,y).contents = player
         return True
 
-
     def get_lowest_open_cell_height(self, column_index: int) -> int:
         """
         Finds the lowest open cell in a column.
         Returns False if the column is already full.
         """
         for i in range(self.y_size):
-            print(f"({column_index},{i}) is: {self.get_cell(column_index, i)}")
+            #print(f"({column_index},{i}) is: {self.get_cell(column_index, i)}")  # DEBUG
             if not self.get_cell(column_index,i).is_occupied():
                 return i
         return -1
@@ -81,7 +79,7 @@ class Board:
         """
         height = self.get_lowest_open_cell_height(column_index)
         if height >= 0 :
-            print(f"Inserting token into column {column_index}. Found lowest open height of {height}.")  # DEBUG
+            # print(f"Inserting token into column {column_index}. Found lowest open height of {height}.")  # DEBUG
             self.set_cell(column_index, height, player) 
             return True   
         elif height == -1:
@@ -89,8 +87,6 @@ class Board:
             return False
         else:
             raise Exception(f"Unexpected error while finding height to insert attempt. Got '{height}'.")
-
-                
 
     def get_row(self, row_index: int) -> List[Player]:
         """
@@ -105,7 +101,6 @@ class Board:
         for i in range(self.x_size):
             output.append(self.get_cell(i, row_index))
         return output
-            
 
     def row_to_string(self, row_index: int) -> str:
         """
@@ -140,63 +135,73 @@ class Board:
         print("_" * board_width)
         for row in range(self.y_size - 1, -1, -1):
             print(self.row_to_string(row))
+
+    def get_all_cells(self) -> List[Cell]:
+        return [cell for column in self.board_grid for cell in column]
+
+    def count_most_occupied_cells(self) -> int:
+
+        cells = self.get_all_cells()
+
+        player_token_counter = {}
+        for c in cells:
+            # Skip empty cells
+            if c.contents is None:
+                continue
+
+            # Unskip full cells    
+            if c.contents not in player_token_counter.keys():
+                player_token_counter[c.contents] = 1
+            else:
+                player_token_counter[c.contents] += 1
         
-    def check_for_win(self, win_num, move): # TODO: Make name more accurate
+        for player,tc in player_token_counter.items():
+            print(f"Player {player.plid} ({player.name}) has {tc} tokens.")
+        
+        
+        if len(player_token_counter) == 0:
+            return 0
+        else:
+            return max(player_token_counter.values())
+
+    def determine_winner(self, win_num) -> Player:# TODO: Make name more accurate
         """
         Win check algorithm:
-            Look at latest player move position
-            compare with nearby cells 
-            if cells contain same player object add a point
-            if not, reset and try another direction
-        
+            Compare entire board, due to placement being difficult to calculate when 
+            winning token placed in between other pieces
         """
-        points = 0
+
+        # Check first to see if there are enough pieces on the board for a win. If not, no winners!
+        poswin = self.count_most_occupied_cells()
+        if poswin < win_num:
+            return None
+
+        all_board = self.get_all_cells()
+        current_check = ''
         
-        for origin_x in range(self.x_size):
-            for origin_y in range(self.y_size):
-                # Skip unoccupied cells
-                origin_cell: Player = self.get_cell(origin_x, origin_y)
-                if origin_cell is None:
-                    continue
-                # Compare with lower cells
-                if self.check_valid_coord(origin_x + 1, origin_y - 1):
-                    check_cell_y = self.get_cell(origin_x, origin_y - 1)
-                else:
-                    check_cell_y = None
+        # Check each cell, skipping empties
+        for c in all_board:
+            if c.contents is None:
+                continue
+            
+            # if cell not empty, begin to compare with others
+            friendly_player = c.contents
+            origin_coord = Coord(c.x_pos,c.y_pos)
 
-                # Compare with left cell    
-                if self.check_valid_coord(origin_x +1, origin_y):
-                    check_cell_x = self.get_cell(origin_x +1 , origin_y)
-                else:
-                    check_cell_x = None
+            for direction in get_directions():
+                for distance in range(win_num):
+                    check_x, check_y = translate(origin_coord,direction,distance)
 
+                    if not self.check_valid_coord(check_x,check_y):
+                        break
 
-                # Compare with digonal up left
-                if self.check_valid_coord(origin_x +1, origin_y + 1):
-                    check_cell_diagUp = self.get_cell(origin_x + 1, origin_y + 1)
-                else:
-                    check_cell_diagUp = None
-
-                # Compare with Diag down
-                if self.check_valid_coord(origin_x +1, origin_y - 1):    
-                    check_cell_diagDown = self.get_cell(origin_x + 1, origin_y - 1)
-                else:
-                    check_cell_diagDown = None
-                
-                # Compare with all
-                if origin_cell == (check_cell_y or check_cell_x or check_cell_diagDown or check_cell_diagUp):
-                    points += 1
-                else:
-                    points = 0
-
-                if points >= win_num:
-                    print(f"Player {origin_cell} wins!")
-                    exit()               
-
-                     
-
-        return False
-        '''
+                    current_check = self.get_cell(check_x,check_y) 
+                    
+                    if distance + 1 >= win_num:
+                        return friendly_player
+                    if current_check.contents != friendly_player:
+                        break
+        return None
 
     @staticmethod
     def run_tests():
@@ -284,15 +289,58 @@ class Board:
         # this should fail
         test = testboard.insert_token_into_column(3, player_list[0])
         assert test == False, f"This should have failed as column is full. instead got {test}"
-
-
+        '''
         #check the win
-        test = testboard.check_for_win(3,3)
-        assert test == True, f"This should return true. Got {test}."
-
-
-
+        test = testboard.check_for_win(4)
+        assert test == True, f"this should return true. got {test}"
+        '''
         
+        # Test helper functions
+        testboard = Board(5,5)
+        all_cells = testboard.get_all_cells()
+        
+        assert len(all_cells) == 25, f"get_all_cells returned {len(all_cells)} cells instead of 25."
+        
+        now_token_count = testboard.count_most_occupied_cells()
+        assert now_token_count == 0, f"count_most_occupied_cells returned {now_token_count} instead of 0 on an empty board."
+        
+        testboard.insert_token_into_column(0, player_list[0])
+        now_token_count = testboard.count_most_occupied_cells()
+        assert now_token_count == 1, f"count_most_occupied_cells returned {now_token_count} instead of 1."
+
+        testboard.insert_token_into_column(3, player_list[0])
+        now_token_count = testboard.count_most_occupied_cells()
+        assert now_token_count == 2, f"count_most_occupied_cells returned {now_token_count} instead of 2."
+
+        testboard.insert_token_into_column(3, player_list[1])
+        testboard.insert_token_into_column(3, player_list[1])
+        testboard.insert_token_into_column(3, player_list[1])  
+        now_token_count = testboard.count_most_occupied_cells()
+        assert now_token_count == 3, f"count_most_occupied_cells returned {now_token_count} instead of 3."
+        
+        # Check for win is complex and needs lots of tests  
+        testboard = Board(5,5)
+        assert testboard.determine_winner(3) == None, "Board is empty, but somehow we found a winner."
+        testboard.insert_token_into_column(3, player_list[1])
+        assert testboard.determine_winner(3) == None, "Board only has one token on it, but we found a winner."
+        testboard.insert_token_into_column(3, player_list[1])
+        testboard.insert_token_into_column(3, player_list[1])
+        assert testboard.determine_winner(3) == player_list[1], "Failed to detect a vertical win."
+        testboard.insert_token_into_column(1, player_list[1])
+        testboard.insert_token_into_column(2, player_list[1])
+        testboard.insert_token_into_column(4, player_list[1])  # Already have a column in 3
+        assert testboard.determine_winner(4) == player_list[1], "Failed to detect a horizontal win."
+        
+        testboard = Board(5,5)
+        testboard.insert_token_into_column(1, player_list[1])
+        testboard.insert_token_into_column(2, player_list[0])
+        testboard.insert_token_into_column(2, player_list[1])
+        testboard.insert_token_into_column(3, player_list[0])
+        testboard.insert_token_into_column(3, player_list[0])
+        testboard.insert_token_into_column(3, player_list[1])
+        testboard.print_board()
+        assert testboard.determine_winner(3) == player_list[1], "Failed to detect a diagonal win."
+
 
 
 if __name__ == "__main__":
