@@ -118,11 +118,6 @@ class Board:
             
         return "|" + "|".join(list_out) + "|"
     
-    def get_adjacent(self, x: int, y: int) -> List:
-        """
-        Returns a (...?) containing the values adjacent to a given index.
-        """
-        print("This would have returned a list of adjacent cells, but isn't yet implemented.")
 
     def print_board(self):
         """
@@ -178,7 +173,7 @@ class Board:
 
         all_board = self.get_all_cells()
         current_check = ''
-        
+     
         # Check each cell, skipping empties
         for c in all_board:
             if c.contents is None:
@@ -203,6 +198,9 @@ class Board:
 
                     if distance + 1 >= win_num:
                         return friendly_player
+        
+        
+              
 
         return None
 
@@ -361,7 +359,14 @@ class Board:
         testboard.print_board()
         assert testboard.determine_winner(3) == None, f"Winner {testboard.determine_winner(3)} set despite 3 not being in a row."
        
-
+        testboard = Board(2,2)
+        testboard.insert_token_into_column(1, player_list[1])
+        testboard.insert_token_into_column(1, player_list[0])
+        testboard.insert_token_into_column(0, player_list[1])
+        testboard.print_board()
+        testboard.insert_token_into_column(0, player_list[1])
+        testboard.print_board()        
+        assert testboard.determine_winner(3) == None, f"Winner {testboard.determine_winner(3)} set board being full."
 
 if __name__ == "__main__":
     Board.run_tests()
