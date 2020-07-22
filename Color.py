@@ -5,17 +5,17 @@ class Color:
 
     abbreviation_length = 3
 
-    def __init__(self, full_name: str, rgb: str, abbreviation: str = None):
+    def __init__(self, full_name: str, color_code: str, abbreviation: str = None):
         """
         :param full_name: Full name of a color: "Yellow"
-        :param rgb: 3-digit Hex RGB color code: "fff"
+        :param color_code: ANSI control code for this color
         :param abbreviation: Short name of a color: "yel"
         """
 
         # Assign parameters
         self.color_name = full_name
         self.abbreviation = abbreviation or full_name[:Color.abbreviation_length]
-        self.rgb = rgb
+        self.color_code = color_code
 
         # Other fields
         Color.color_list[full_name] = self
@@ -25,3 +25,4 @@ class Color:
 
     def __repr__(self):
         return "(Color) " + self.color_name
+

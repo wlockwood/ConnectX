@@ -1,6 +1,6 @@
 from Color import *
 from typing import Dict, List
-
+from colorama import Fore, Back, Style, init
 
 class Player:
     default_player_names: List = ["Chrono", "Lucca", "Marle", "Magus", "Robo", "Ayla", 
@@ -51,10 +51,10 @@ class PlayerColor(Color):
     all_colors: Dict = {}
 
 
-    def __init__(self, full_name: str, rgb: str, abbreviation: str = ""):
+    def __init__(self, full_name: str, color_code: str, abbreviation: str = ""):
         # Build the underlying Color if it doesn't already exist
         if full_name not in Color.color_list.keys():
-            super().__init__(full_name, rgb, abbreviation)
+            super().__init__(full_name, color_code, abbreviation)
 
         PlayerColor.all_colors[full_name] = self
 
@@ -102,8 +102,12 @@ class PlayerColor(Color):
 
     @staticmethod
     def build_player_colors():  # TODO: This should probably be in the Color class.
-        PlayerColor("red", "d22")
-        PlayerColor("blue", "22d")
+        init() # For Windows
+        PlayerColor("red", Fore.RED)
+        PlayerColor("blue", Fore.BLUE)
+        
+        
+        """
         PlayerColor("yellow", "ff5", "ylw")
         PlayerColor("green", "2d2", "grn")
         PlayerColor("orange", "e80", "org")
@@ -114,4 +118,5 @@ class PlayerColor(Color):
         PlayerColor("magenta", "f3e")
         PlayerColor("coral", "fdb")
         PlayerColor("navy", "007")
+        """
 

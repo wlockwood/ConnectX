@@ -132,7 +132,16 @@ class Board:
             print(self.row_to_string(row))
 
     def get_all_cells(self) -> List[Cell]:
+        """
+        Returns a list of all cells in the board.
+        """
         return [cell for column in self.board_grid for cell in column]
+
+    def can_continue(self) -> bool:
+        """
+        Check to see if there are still empty spots on the board to play.
+        """
+        return any(not x.is_occupied() for x in self.get_all_cells())
 
     def count_most_occupied_cells(self) -> int:
 
@@ -150,8 +159,9 @@ class Board:
             else:
                 player_token_counter[c.contents] += 1
         
-        for player,tc in player_token_counter.items():
-            print(f"Player {player.plid} ({player.name}) has {tc} tokens.")
+        if False:  # DEBUG
+            for player,tc in player_token_counter.items():
+                print(f"Player {player.plid} ({player.name}) has {tc} tokens.")
         
         
         if len(player_token_counter) == 0:
@@ -200,7 +210,6 @@ class Board:
                         return friendly_player
         
         
-              
 
         return None
 

@@ -59,17 +59,17 @@ Ryan (green player), it's your turn. Input the column you'd like to place into (
  - Validate that there are open spaces on that column
  - Find a way to find the lowest row in that column
 """
-def take_turn(gameboard: Board, p: Player, win_num: int):
-    gameboard.print_board()
-    move = ask_for_int(f"Player {p.plid}, ({p.name}) it is your turn. Please choose a column.",accept_min=1,accept_max=gameboard.x_size) - 1
-    gameboard.insert_token_into_column(move,p)  #TODO: Actually handle players attempting invalid moves
-    winner = gameboard.determine_winner(win_num)
-    if winner:
-        gameboard.print_board()
-        print(f"Yay, {winner} won!")
-        exit()
-    
 
+
+def take_turn(gameboard: Board, p: Player):
+    gameboard.print_board()
+    
+    place_successful = False
+    while not place_successful:
+        move = ask_for_int(f"Player {p.plid}, ({p.name}) it is your turn. Please choose a column.",accept_min=1,accept_max=gameboard.x_size) - 1
+        place_successful = gameboard.insert_token_into_column(move,p)
+
+    
 
 def main():
     # Defaults here are based off of replicating the classic game Connect Four. Maxes and Mins are just guesses.
@@ -101,7 +101,16 @@ def main():
     # Cycling through turns
     while(True):
         for p in players:
-            take_turn(gameboard, p, win_run_length)
+            take_turn(gameboard, p)
+            if not gameboard.can_continue(): 
+                print(f"Board full - nobody wins. Boo")
+                exit()
+
+            winner = gameboard.determine_winner(win_run_length)
+            if winner:
+                gameboard.print_board()
+                print(f"Yay, {winner} won!")
+                exit()
 
 
    
