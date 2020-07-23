@@ -95,7 +95,7 @@ class Board:
         Output is zero-indexed.
         """
         if row_index > self.y_size:
-            raise Exception(f"Attempted to retrieve row at row_index {row_index}, but the board only has {y_size} rows.")
+            raise Exception(f"Attempted to retrieve row at row_index {row_index}, but the board only has {self.y_size} rows.")
         
         output = []
         for i in range(self.x_size):

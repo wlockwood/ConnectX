@@ -34,7 +34,7 @@ def get_players():
             cur_player = input(f"Player {play_id + 1} , What is your name?\n")
         else:
             cur_player = Player.default_player_names[play_id]  # debug val.
-        players.update({cur_player: Player(play_id, cur_player, cur_col)})
+        players.update({cur_player: Player(cur_player, cur_col)})
         play_id += 1
         player_num -= 1
 
