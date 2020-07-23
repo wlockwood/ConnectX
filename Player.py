@@ -27,7 +27,8 @@ class Player:
         return f"[Player {self.plid}, {str(self)}]"
 
     def get_board_representation(self):
-        return self.color.abbreviation
+        # return self.color.abbreviation
+        return self.color.color_code + "⬤" + Style.RESET_ALL + " "
 
     @classmethod
     def get_next_default_player_name(cls):
@@ -105,14 +106,12 @@ class PlayerColor(Color):
         init() # For Windows
         PlayerColor("red", Fore.RED)
         PlayerColor("blue", Fore.BLUE)
-        
-        
+        PlayerColor("yellow", Fore.YELLOW)
+        PlayerColor("green", Fore.GREEN)
+        PlayerColor("magenta", Fore.MAGENTA)
+        PlayerColor("cyan", Fore.CYAN)
+        PlayerColor("white", Fore.WHITE)
         """
-        PlayerColor("yellow", "ff5", "ylw")
-        PlayerColor("green", "2d2", "grn")
-        PlayerColor("orange", "e80", "org")
-        PlayerColor("purple", "dd0", "prp")
-        PlayerColor("brown", "b50", "brn")
         PlayerColor("lime", "bfc", "lim")
         PlayerColor("cyan", "4ff")
         PlayerColor("magenta", "f3e")

@@ -24,7 +24,7 @@ class Cell:
         if self.is_occupied():
             return self.contents.get_board_representation()
         else:
-            return "___"
+            return "__"
 
     def __repr__(self) -> str:
         return f"Cell({self.x_pos},{self.y_pos}: {self.contents})"
@@ -35,3 +35,4 @@ if __name__ == "__main__":
     test_cell = Cell(0,0)
     print(type(test_cell))
     print(type(test_cell.is_occupied))
+    print(test_cell.get_board_representation())

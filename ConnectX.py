@@ -76,7 +76,7 @@ def main():
     
     # Ask for player configuration. TODO: Names and colors
     PlayerColor.build_player_colors()
-    player_count = ask_for_int("How many players?", default=2, accept_min=2, accept_max=12)
+    player_count = ask_for_int("How many players?", default=2, accept_min=2, accept_max=7)
     players = [Player() for i in range(player_count)]
     print(players)
     
@@ -101,16 +101,23 @@ def main():
     # Cycling through turns
     while(True):
         for p in players:
-            take_turn(gameboard, p)
-            if not gameboard.can_continue(): 
-                print(f"Board full - nobody wins. Boo")
-                exit()
-
             winner = gameboard.determine_winner(win_run_length)
             if winner:
                 gameboard.print_board()
                 print(f"Yay, {winner} won!")
                 exit()
+
+            if not gameboard.can_continue(): 
+                gameboard.print_board()
+                print(f"Board full - nobody wins. Boo")
+                exit()           
+            
+            
+            
+            take_turn(gameboard, p)
+            
+
+        
 
 
    

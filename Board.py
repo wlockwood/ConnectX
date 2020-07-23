@@ -127,7 +127,7 @@ class Board:
         board_title = "Current board state"
         print()
         print("{title:=^{bw}}".format(title=board_title, bw=board_width))
-        print(" ___" * board_width)
+        print(" __" * board_width)
         for row in range(self.y_size - 1, -1, -1):
             print(self.row_to_string(row))
 
